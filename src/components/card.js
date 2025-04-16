@@ -1,7 +1,7 @@
 // card.js
 
 // Функция создания карточки
-export default function createCard(link, name, handleLikeClickFn) {
+export default function createCard(link, name, removeCard, handleLikeClickFn) {
   const card = document
     .querySelector('#card-template')
     .content.cloneNode(true)
@@ -17,7 +17,7 @@ export default function createCard(link, name, handleLikeClickFn) {
   cardTitle.textContent = name;
 
   // Встроенное удаление карточки
-  cardDeleteBtn.addEventListener('click', () => card.remove());
+  cardDeleteBtn.addEventListener('click', () => removeCard(card));
 
   // Лайк
   likeButton.addEventListener('click', handleLikeClickFn);

@@ -18,6 +18,9 @@ const getOpenedModal = () => document.querySelector('.popup_is-opened');
 // Функция закрытие модалки
 export const closeModal = (modal) => modal.classList.remove('popup_is-opened');
 
+// Функция удаления карточки
+export const removeCard = (card) => card.remove();
+
 // Обработчик клика по кнопке лайка:
 export const handleLikeClick = (e) => {
   e.target.classList.toggle('card__like-button_is-active');
@@ -43,6 +46,7 @@ export const handleAddCardSubmit = (e) => {
   const card = createCard(
     inputTypeUrl.value,
     inputCardName.value,
+    removeCard,
     handleLikeClick
   ); // Создаем карточку
 
