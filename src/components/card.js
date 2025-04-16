@@ -1,7 +1,5 @@
 // card.js
 
-import { likeButton } from './constants.js';
-
 // Функция создания карточки
 export default function createCard(link, name, handleLikeClickFn) {
   const card = document

@@ -23,7 +23,7 @@ addCards(initialCards, cardsContainer);
 editProfileForm.addEventListener('submit', handleFormSubmit);
 newPlaceForm.addEventListener('submit', handleAddCardSubmit);
 
-// Функция для добавления обработчиков кликов и открытие модального окнапо кнопкам с data-target
+// Функция для добавления обработчиков кликов и открытие модального окна по кнопкам с data-target
 export const addModalOpenListeners = () => {
   document.querySelectorAll('[data-target]').forEach((btn) => {
     btn.addEventListener('click', () => {
