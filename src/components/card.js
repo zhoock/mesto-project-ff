@@ -1,7 +1,13 @@
 // card.js
 
 // Функция создания карточки
-export default function createCard(link, name, removeCard, handleLikeClickFn) {
+export const createCard = (
+  link,
+  name,
+  handleRemoveCard,
+  handleImageClick,
+  handleLikeClickFn
+) => {
   const card = document
     .querySelector('#card-template')
     .content.cloneNode(true)
@@ -16,11 +22,14 @@ export default function createCard(link, name, removeCard, handleLikeClickFn) {
   cardImg.alt = name;
   cardTitle.textContent = name;
 
-  // Встроенное удаление карточки
-  cardDeleteBtn.addEventListener('click', () => removeCard(card));
+  // Удаление карточки
+  cardDeleteBtn.addEventListener('click', () => handleRemoveCard(card));
+
+  // Открытие попапа с изображением
+  cardImg.addEventListener('click', handleImageClick);
 
   // Лайк
   likeButton.addEventListener('click', handleLikeClickFn);
 
   return card;
-}
+};
