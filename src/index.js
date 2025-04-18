@@ -13,36 +13,24 @@ import {
   popupTypeNewCard,
   inputTypeUrl,
   inputCardName,
-  modalImg,
-  modalCaption,
   inputName,
   inputDescription,
-  modalImagePopup,
 } from './components/constants.js';
 import initialCards from './components/cards.js';
-import { createCard } from './components/card.js';
-import { openModal, closeModal } from './components/modal.js';
+import {
+  createCard,
+  handleRemoveCard,
+  handleLikeClick,
+  handleImageClick,
+} from './components/card.js';
+import {
+  openModal,
+  closeModal,
+  setCloseButtonsEventListeners,
+} from './components/modal.js';
 
-// Обработчик клика удаления карточки
-const handleRemoveCard = (card) => card.remove();
-
-// Обработчик клика по кнопке лайка
-const handleLikeClick = (e) => {
-  e.target.classList.toggle('card__like-button_is-active');
-};
-
-// Обработчик клика по изображению карточки. Открывает модальное окно с увеличенной картинкой и подписью
-const handleImageClick = (e) => {
-  const img = e.target;
-
-  modalImg.onload = () => {
-    openModal(modalImagePopup); // Открываем, когда картинка загрузится
-  };
-
-  modalImg.src = img.src;
-  modalImg.alt = img.alt;
-  modalCaption.textContent = img.alt;
-};
+// Назначает обработчики на все кнопки закрытия модалок (крестики) один раз при запуске, чтобы не дублировались
+setCloseButtonsEventListeners();
 
 // Добавление карточек на страницу
 const addCards = (initialCards, cardsContainer) =>
@@ -119,14 +107,6 @@ modalOpenButtons.forEach(({ button, modal, getValues }) => {
       // Заполняем поля ввода данными
       inputName.value = firstValue; // Имя пользователя
       inputDescription.value = secondValue; // Описание пользователя
-    }
-
-    // Если это модалка для изображения
-    else if (modal.classList.contains('popup_type_image')) {
-      // Заполняем поля ввода данными
-      modalImg.src = firstValue; // Ссылка на изображение
-      modalImg.alt = secondValue; // Альтернативный текст
-      modalCaption.textContent = secondValue; // Подпись
     }
 
     openModal(modal);

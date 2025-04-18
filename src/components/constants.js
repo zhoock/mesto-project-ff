@@ -1,5 +1,8 @@
 // constants.js
 
+// Шаблон карточки
+export const cardTemplate = document.querySelector('#card-template');
+
 // Контейнер для карточек
 export const cardsContainer = document.querySelector('.places__list');
 

@@ -16,15 +16,6 @@ export const closeModal = (modal) => {
 };
 
 export const setModalWindowEventListeners = (modal) => {
-  // Закрытие модалки по кнопке
-  document
-    .querySelectorAll('.popup__close')
-    .forEach((btn) =>
-      btn.addEventListener('click', (e) =>
-        closeModal(e.target.closest('.popup'))
-      )
-    );
-
   // Callback закрытие модалки по Esc
   const handleEscClose = (e) => {
     e.key === 'Escape' && closeModal(modal);
@@ -42,4 +33,15 @@ export const setModalWindowEventListeners = (modal) => {
   // Сохраняем обработчики в объект модалки
   modal._handleEscClose = handleEscClose;
   modal._handleOverlayClose = handleOverlayClose;
+};
+
+export const setCloseButtonsEventListeners = () => {
+  // Закрытие модалки по кнопке
+  document
+    .querySelectorAll('.popup__close')
+    .forEach((btn) =>
+      btn.addEventListener('click', (e) =>
+        closeModal(e.target.closest('.popup'))
+      )
+    );
 };

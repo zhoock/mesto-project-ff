@@ -1,5 +1,13 @@
 // card.js
 
+import {
+  cardTemplate,
+  modalImagePopup,
+  modalImg,
+  modalCaption,
+} from './constants.js';
+import { openModal } from './modal.js';
+
 // Функция создания карточки
 export const createCard = (
   link,
@@ -8,10 +16,7 @@ export const createCard = (
   handleImageClick,
   handleLikeClickFn
 ) => {
-  const card = document
-    .querySelector('#card-template')
-    .content.cloneNode(true)
-    .querySelector('.card');
+  const card = cardTemplate.content.cloneNode(true).querySelector('.card');
 
   const cardImg = card.querySelector('.card__image');
   const cardTitle = card.querySelector('.card__title');
@@ -32,4 +37,25 @@ export const createCard = (
   likeButton.addEventListener('click', handleLikeClickFn);
 
   return card;
+};
+
+// Обработчик клика удаления карточки
+export const handleRemoveCard = (card) => card.remove();
+
+// Обработчик клика по кнопке лайка
+export const handleLikeClick = (e) => {
+  e.target.classList.toggle('card__like-button_is-active');
+};
+
+// Обработчик клика по изображению карточки. Открывает модальное окно с увеличенной картинкой и подписью
+export const handleImageClick = (e) => {
+  const img = e.target;
+
+  modalImg.onload = () => {
+    openModal(modalImagePopup); // Открываем, когда картинка загрузится
+  };
+
+  modalImg.src = img.src;
+  modalImg.alt = img.alt;
+  modalCaption.textContent = img.alt;
 };
