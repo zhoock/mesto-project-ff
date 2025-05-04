@@ -1,4 +1,4 @@
-// modals.js
+// components/modals.js
 
 // Открытие модалки
 export const openModal = (modal) => {

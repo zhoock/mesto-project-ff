@@ -1,4 +1,8 @@
-// constants.js
+// components/constants.js
+
+// Токен и идентификатор группы
+export const AUTH_TOKEN = 'ccfd0c2b-b610-42b1-b6b5-ebb74bc474ac';
+export const COHORT = 'wff-cohort-38';
 
 // Шаблон карточки
 export const cardTemplate = document.querySelector('#card-template');
@@ -7,12 +11,23 @@ export const cardTemplate = document.querySelector('#card-template');
 export const cardsContainer = document.querySelector('.places__list');
 
 // Элементы профиля
+export const profileImgEditButton = document.querySelector(
+  '.profile__image-edit-button'
+);
 export const profileEditButton = document.querySelector(
   '.profile__edit-button'
 );
+export const profileAvatar = document.querySelector('.profile__image');
 export const profileTitle = document.querySelector('.profile__title');
 export const profileDescription = document.querySelector(
   '.profile__description'
+);
+
+// Элементы попапа с редактированием аватара
+export const popupTypeImgEdit = document.querySelector('.popup_type_img_edit');
+export const editAvatarForm = document.forms['edit-avatar'];
+export const inputAvatarUrl = editAvatarForm.querySelector(
+  '.popup__input_type_avatar-url'
 );
 
 // Элементы попапа редактирования профиля
