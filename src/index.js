@@ -38,7 +38,6 @@ import {
   openModal,
   closeModal,
   setCloseButtonsEventListeners,
-  initModalGlobalListeners,
 } from './components/modal.js';
 import {
   enableValidation,
@@ -187,6 +186,13 @@ const addCards = (initialCards, cardsContainer, currentUserId) => {
 // Переменная для хранения id текущего пользователя
 let currentUserId;
 
+// ======= СЛУШАТЕЛИ СОБЫТИЙ =======
+
+// Назначаем обработчики событий на формы
+editProfileForm.addEventListener('submit', handleEditProfileSubmit);
+newPlaceForm.addEventListener('submit', handleAddCardSubmit);
+editAvatarForm.addEventListener('submit', handleEditAvatarSubmit);
+
 // Массив кнопок для открытия модалок с соответствующими модальными окнами и значениями по умолчанию
 const modalOpenButtons = [
   {
@@ -239,7 +245,6 @@ modalOpenButtons.forEach(({ button, modal, getValues }) => {
 // ======= ИНИЦИАЛИЗАЦИЯ =======
 
 setCloseButtonsEventListeners(); // Назначает обработчики на все кнопки закрытия модалок (крестики) один раз при запуске
-initModalGlobalListeners(); // Назначает обработчики на Escape и клик по оверлею один раз при запуске
 enableValidation(validationConfig); // Валидация форм
 
 // Запрос на сервер для получения данных профиля и карточек
@@ -257,13 +262,6 @@ Promise.all([
 
     // Добавляем карточки на страницу
     addCards(cardsData, cardsContainer, currentUserId);
-
-    // ======= СЛУШАТЕЛИ СОБЫТИЙ =======
-
-    // Назначаем обработчики только после получения currentUserId
-    editProfileForm.addEventListener('submit', handleEditProfileSubmit);
-    newPlaceForm.addEventListener('submit', handleAddCardSubmit);
-    editAvatarForm.addEventListener('submit', handleEditAvatarSubmit);
   })
   .catch((err) => {
     console.error('Ошибка при загрузке данных:', err);

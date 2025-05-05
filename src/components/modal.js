@@ -3,11 +3,15 @@
 // Открытие модалки
 export const openModal = (modal) => {
   modal.classList.add('popup_is-opened');
+  document.addEventListener('keydown', handleEscClose);
+  document.addEventListener('mousedown', handleOverlayClose);
 };
 
 // Закрытие модалки
 export const closeModal = (modal) => {
   modal.classList.remove('popup_is-opened');
+  document.removeEventListener('keydown', handleEscClose);
+  document.removeEventListener('mousedown', handleOverlayClose);
 };
 
 // Закрытие модалки по кнопке
@@ -30,10 +34,4 @@ const handleEscClose = (e) => {
 // Глобальный обработчик клика по оверлею
 const handleOverlayClose = (e) => {
   e.target.classList.contains('popup') && closeModal(e.target);
-};
-
-// Инициализация глобальных обработчиков
-export const initModalGlobalListeners = () => {
-  document.addEventListener('keydown', handleEscClose);
-  document.addEventListener('mousedown', handleOverlayClose);
 };
