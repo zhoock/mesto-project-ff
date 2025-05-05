@@ -38,6 +38,7 @@ import {
   openModal,
   closeModal,
   setCloseButtonsEventListeners,
+  initModalGlobalListeners,
 } from './components/modal.js';
 import {
   enableValidation,
@@ -54,6 +55,7 @@ import {
 
 // ======= ФУНКЦИИ-ОБРАБОТЧИКИ =======
 
+// ОБработчик клика по кнопке редактирования аватара
 const handleEditAvatarSubmit = (e) => {
   e.preventDefault(); // Отменяем стандартное поведение формы
 
@@ -149,6 +151,7 @@ const handleAddCardSubmit = (e) => {
       cardsContainer.prepend(card); // Добавляем карточку в начало контейнера
       newPlaceForm.reset(); // Очищаем поля формы
       closeModal(popupTypeNewCard); // Закрываем модалку
+      clearValidation(newPlaceForm, validationConfig); // Очистка ошибок валидации после успешной отправки
     })
     .catch((err) => {
       console.error('Ошибка при добавлении карточки:', err);
@@ -183,13 +186,6 @@ const addCards = (initialCards, cardsContainer, currentUserId) => {
 
 // Переменная для хранения id текущего пользователя
 let currentUserId;
-
-// ======= СЛУШАТЕЛИ СОБЫТИЙ =======
-
-// Обработчики отправки форм
-editAvatarForm.addEventListener('submit', handleEditAvatarSubmit);
-editProfileForm.addEventListener('submit', handleEditProfileSubmit);
-newPlaceForm.addEventListener('submit', handleAddCardSubmit);
 
 // Массив кнопок для открытия модалок с соответствующими модальными окнами и значениями по умолчанию
 const modalOpenButtons = [
@@ -226,15 +222,15 @@ modalOpenButtons.forEach(({ button, modal, getValues }) => {
       // Заполняем поля ввода данными
       inputName.value = firstValue; // Имя пользователя
       inputDescription.value = secondValue; // Описание пользователя
+      clearValidation(form, validationConfig);
     }
 
-    // Если это модалка для добавления карточки, то очищаем поля ввода
+    // Если это модалка для добавления карточки
     if (modal.classList.contains('popup_type_new-card')) {
-      form.reset(); // очищаем поля только у нужной формы
+      // Оставляем значения, если они уже есть
+      inputCardName.value = inputCardName.value || '';
+      inputTypeUrl.value = inputTypeUrl.value || '';
     }
-
-    // Перед открытием очищаем все ошибки валидации
-    clearValidation(form, validationConfig);
 
     openModal(modal);
   });
@@ -242,11 +238,9 @@ modalOpenButtons.forEach(({ button, modal, getValues }) => {
 
 // ======= ИНИЦИАЛИЗАЦИЯ =======
 
-// Назначает обработчики на все кнопки закрытия модалок (крестики) один раз при запуске
-setCloseButtonsEventListeners();
-
-// Валидация форм
-enableValidation(validationConfig);
+setCloseButtonsEventListeners(); // Назначает обработчики на все кнопки закрытия модалок (крестики) один раз при запуске
+initModalGlobalListeners(); // Назначает обработчики на Escape и клик по оверлею один раз при запуске
+enableValidation(validationConfig); // Валидация форм
 
 // Запрос на сервер для получения данных профиля и карточек
 Promise.all([
@@ -263,6 +257,13 @@ Promise.all([
 
     // Добавляем карточки на страницу
     addCards(cardsData, cardsContainer, currentUserId);
+
+    // ======= СЛУШАТЕЛИ СОБЫТИЙ =======
+
+    // Назначаем обработчики только после получения currentUserId
+    editProfileForm.addEventListener('submit', handleEditProfileSubmit);
+    newPlaceForm.addEventListener('submit', handleAddCardSubmit);
+    editAvatarForm.addEventListener('submit', handleEditAvatarSubmit);
   })
   .catch((err) => {
     console.error('Ошибка при загрузке данных:', err);

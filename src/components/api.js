@@ -59,3 +59,19 @@ export const addCard = ({ name, link }) => {
     body: JSON.stringify({ name, link }),
   }).then(handleResponse);
 };
+
+// Удалить карточку
+export const deleteCard = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/${cardId}`, {
+    method: 'DELETE',
+    headers: config.headers,
+  }).then(handleResponse);
+};
+
+// Поставить лайк
+export const likeCard = (cardId, method) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method,
+    headers: config.headers,
+  }).then(handleResponse);
+};

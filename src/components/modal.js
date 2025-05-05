@@ -2,41 +2,16 @@
 
 // Открытие модалки
 export const openModal = (modal) => {
-  setModalWindowEventListeners(modal);
   modal.classList.add('popup_is-opened');
 };
 
 // Закрытие модалки
 export const closeModal = (modal) => {
   modal.classList.remove('popup_is-opened');
-
-  // Убираем обработчики
-  document.removeEventListener('keydown', modal._handleEscClose);
-  modal.removeEventListener('mousedown', modal._handleOverlayClose);
 };
 
-export const setModalWindowEventListeners = (modal) => {
-  // Callback закрытие модалки по Esc
-  const handleEscClose = (e) => {
-    e.key === 'Escape' && closeModal(modal);
-  };
-
-  // Callback закрытие модалки по клику на оверлей
-  const handleOverlayClose = (e) => {
-    e.target === modal && closeModal(modal);
-  };
-
-  // Навешиваем обработчики
-  document.addEventListener('keydown', handleEscClose);
-  modal.addEventListener('mousedown', handleOverlayClose);
-
-  // Сохраняем обработчики в объект модалки
-  modal._handleEscClose = handleEscClose;
-  modal._handleOverlayClose = handleOverlayClose;
-};
-
+// Закрытие модалки по кнопке
 export const setCloseButtonsEventListeners = () => {
-  // Закрытие модалки по кнопке
   document
     .querySelectorAll('.popup__close')
     .forEach((btn) =>
@@ -44,4 +19,21 @@ export const setCloseButtonsEventListeners = () => {
         closeModal(e.target.closest('.popup'))
       )
     );
+};
+
+// Глобальный обработчик Escape
+const handleEscClose = (e) => {
+  const openedPopup = document.querySelector('.popup_is-opened');
+  if (e.key === 'Escape') e.key === 'Escape' && closeModal(openedPopup);
+};
+
+// Глобальный обработчик клика по оверлею
+const handleOverlayClose = (e) => {
+  e.target.classList.contains('popup') && closeModal(e.target);
+};
+
+// Инициализация глобальных обработчиков
+export const initModalGlobalListeners = () => {
+  document.addEventListener('keydown', handleEscClose);
+  document.addEventListener('mousedown', handleOverlayClose);
 };

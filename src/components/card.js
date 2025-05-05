@@ -1,6 +1,12 @@
 // components/card.js
 
 import { cardTemplate, AUTH_TOKEN, COHORT } from './constants.js';
+import { deleteCard, likeCard } from './api.js';
+
+// Функция получения DOM-элемента карточки из шаблона
+const getCardTemplate = () => {
+  return cardTemplate.content.cloneNode(true).querySelector('.card');
+};
 
 // Функция создания карточки
 export const createCard = (
@@ -14,13 +20,12 @@ export const createCard = (
   cardId,
   likes
 ) => {
-  const card = cardTemplate.content.cloneNode(true).querySelector('.card');
-
-  const cardImg = card.querySelector('.card__image');
-  const cardTitle = card.querySelector('.card__title');
-  const cardDeleteBtn = card.querySelector('.card__delete-button');
-  const likeButton = card.querySelector('.card__like-button');
-  const likeCounter = card.querySelector('.card__like-count');
+  const card = getCardTemplate(); // Получаем шаблон карточки
+  const cardImg = card.querySelector('.card__image'); // Получаем изображение карточки
+  const cardTitle = card.querySelector('.card__title'); // Получаем заголовок карточки
+  const cardDeleteBtn = card.querySelector('.card__delete-button'); // Получаем кнопку удаления карточки
+  const likeButton = card.querySelector('.card__like-button'); // Получаем кнопку лайка
+  const likeCounter = card.querySelector('.card__like-count'); // Получаем счётчик лайков
 
   cardImg.src = link;
   cardImg.alt = name;
@@ -51,19 +56,8 @@ export const createCard = (
 
 // Обработчик клика удаления карточки
 export const handleRemoveCard = (card, cardId) => {
-  // Отправляем запрос на удаление карточки с сервера
-  fetch(`https://nomoreparties.co/v1/${COHORT}/cards/${cardId}`, {
-    method: 'DELETE',
-    headers: {
-      authorization: AUTH_TOKEN, // Мой токен
-    },
-  })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`Ошибка при удалении карточки: ${res.status}`);
-      }
-      return res.json();
-    })
+  // Отправляем запрос на удаление карточки
+  deleteCard(cardId)
     .then(() => {
       // Удаляем карточку из DOM
       card.remove();
@@ -81,18 +75,7 @@ export const handleLikeClick = (e, cardId) => {
   // Отправляем запрос на постановку или снятие лайка в зависимости от состояния
   const method = isLiked ? 'DELETE' : 'PUT'; // Если лайкнут — DELETE, если не лайкнут — PUT
 
-  fetch(`https://nomoreparties.co/v1/${COHORT}/cards/likes/${cardId}`, {
-    method: method,
-    headers: {
-      authorization: AUTH_TOKEN,
-    },
-  })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`Ошибка при лайкинге карточки: ${res.status}`);
-      }
-      return res.json();
-    })
+  likeCard(cardId, method) // Отправляем запрос на сервер
     .then((updatedCard) => {
       // Обновляем количество лайков и цвет кнопки
       likeButton.classList.toggle('card__like-button_is-active'); // Переключаем класс для цвета кнопки
